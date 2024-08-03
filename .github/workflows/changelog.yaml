@@ -16,14 +16,14 @@ jobs:
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
-                echo "Fetching commits for PR #${PR_NUMBER}"
+                echo "Fetching commits for PR #${{ github.event.number }}"
                 
                 CHANGELOG=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
                 "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/commits" | \
                 jq -r '.[] | "Commit SHA: \(.sha)\t\tMessage: \(.commit.message)\n---"') 
                 
                 echo "CHANGELOG=$CHANGELOG" >> "$GITHUB_OUTPUTS"
-                
+
             - name: Print commits of PR
               run: |
                 echo "${{ steps.commits.outputs.CHANGELOG }}" >> $GITHUB_STEP_SUMMARY

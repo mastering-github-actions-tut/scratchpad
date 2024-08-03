@@ -7,15 +7,19 @@ jobs:
     create-changlog:
         runs-on: ubuntu-latest
         steps:
+            - name: count PR commits
+              run: |
+                echo "FETCH_DEPTH=$(( ${{ github.event.pull_request.commits }} + 1 ))" >> "$GITHUB_ENV"
+                echo "[DEBUG] depth is: $FETCH_DEPTH"
+
             - name: checkout repo
               uses: actions/checkout@v4
-
-            - name: Changelog CI
-              id: changelog-ci
-              uses: saadmk11/changelog-ci@v1.1.2
+              with:
+                ref: ${{ github.event.pull_request.head.ref }}
+                fetch-depth: ${{ env.FETCH_DEPTH }}
         
             - name: print changelog
-              run: |
-                echo "${{ steps.changelog-ci.outputs.changelog }}"
-                echo "${{ steps.changelog-ci.outputs.changelog }}" >> $GITHUB_STEP_SUMMARY
+              run: git log --oneline --graph
+                
+                
 

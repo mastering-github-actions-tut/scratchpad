@@ -22,7 +22,7 @@ jobs:
                 "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/commits" | \
                 jq -r '.[] | "Commit SHA: \(.sha)\t\tMessage: \(.commit.message)\n---"') 
                 
-                echo "CHANGELOG=$CHANGELOG" >> "$GITHUB_OUTPUTS"
+                echo "CHANGELOG=$CHANGELOG" >> $GITHUB_OUTPUTS
 
             - name: Print commits of PR
               run: |

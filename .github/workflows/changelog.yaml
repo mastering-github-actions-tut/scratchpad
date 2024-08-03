@@ -24,7 +24,7 @@ jobs:
 
             - name: Print commits of PR
               run: |
-                cat ./CHANGELOG.md" >> $GITHUB_STEP_SUMMARY
+                cat ./CHANGELOG.md >> $GITHUB_STEP_SUMMARY
 
                             
                 

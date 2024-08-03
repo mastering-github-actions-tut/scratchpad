@@ -7,6 +7,9 @@ jobs:
     create-changlog:
         runs-on: ubuntu-latest
         steps:
+            - name: checkout repo
+              uses: actions/checkout@v4
+
             - name: Changelog CI
               id: changelog-ci
               uses: saadmk11/changelog-ci@v1.1.2

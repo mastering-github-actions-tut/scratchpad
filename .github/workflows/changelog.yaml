@@ -11,17 +11,23 @@ jobs:
               uses: actions/checkout@v4
 
         
-            - name: Print PR commits
+            - name: Get PR commits
+              id: commits 
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
-                PR_NUMBER=${{ github.event.number }}
                 echo "Fetching commits for PR #${PR_NUMBER}"
+                
+                CHANGELOG=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/commits" | \
+                jq -r '.[] | "Commit SHA: \(.sha)\t\tMessage: \(.commit.message)\n---"') 
+                
+                echo "CHANGELOG=$CHANGELOG" >> "$GITHUB_OUTPUTS"
+                
+            - name: Print commits of PR
+              run: |
+                echo "${{ steps.commits.outputs.CHANGELOG }}" >> $GITHUB_STEP_SUMMARY
 
-                # Fetch commits using GitHub API and jq to parse JSON
-                curl -s -H "Authorization: token $GITHUB_TOKEN" \
-                "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}/commits" | \
-                jq -r '.[] | "Commit SHA: \(.sha)\nAuthor: \(.commit.author.name)\nMessage: \(.commit.message)\n---"'
                             
                 
 

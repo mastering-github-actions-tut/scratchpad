@@ -4,39 +4,17 @@ on:
     pull_request: 
 
 jobs:
-    create-changlog:
+    # create a job called 'changelog' that prints all the changes in the PR
+    changelog:
         runs-on: ubuntu-latest
         steps:
-          - name: checkout repo
-            uses: actions/checkout@v4
+            - name: Checkout
+              uses: actions/checkout@v4
 
-          - name: Create changelog
-            id: changelog
-            uses: dragonraid/changelog-emitter@v0.3.1
-            with:
-              github_token: ${{ secrets.GITHUB_TOKEN }}
-
-          - name: Print changelog
-            if: steps.changelog.outputs.isEmpty == false
-            run: |
-              echo "${{ steps.changelog.outputs.changelog }}"
-
-
-# - name: Get PR commits
-#   id: commits 
-#   env:
-#     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#   run: |
-#     echo "Fetching commits for PR #${{ github.event.number }}"
-
-#     CHANGELOG=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-#     "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/commits" | \
-#     jq -r '.[] | "Commit SHA: \(.sha)\t\tMessage: \(.commit.message)\n---"') >> CHANGELOG.md
-
-# - name: Print commits of PR
-#   run: |
-#     echo "$(cat ./CHANGELOG.md)" 
-
-
+            - name: Print PR changes
+              run: |
+                git fetch origin ${{ github.event.pull_request.base.ref }}
+                git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
+            
 
 

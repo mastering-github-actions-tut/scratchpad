@@ -24,7 +24,7 @@ jobs:
 
             - name: Print commits of PR
               run: |
-                cat ./CHANGELOG.md 
+                echo "$(cat ./CHANGELOG.md)" 
 
                             
                 

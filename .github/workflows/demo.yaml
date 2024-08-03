@@ -1,14 +1,13 @@
 name: hello world
 
-on: push
+on:
+  repository_dispatch: 
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-    
-        steps:
-        - name: check tooling
-          run: | 
-            which az
-            echo "az version: $(az version)"
-        
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: check tooling
+        run: echo 'hello world'
+

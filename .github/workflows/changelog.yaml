@@ -22,10 +22,12 @@ jobs:
                 "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/commits" | \
                 jq -r '.[] | "Commit SHA: \(.sha)\t\tMessage: \(.commit.message)\n---"') 
                 
+                echo "test:\n $CHANGELOG"
+
                 echo "$CHANGELOG<<EOF" >> $GITHUB_OUTPUTS
-                echo "CHANGELOG=$CHANGELOG" >> $GITHUB_OUTPUTS
+                echo "$CHANGELOG" >> $GITHUB_OUTPUTS
                 echo "EOF" >> $GITHUB_OUTPUTS
-                
+
             - name: Print commits of PR
               run: |
                 echo "${{ steps.commits.outputs.CHANGELOG }}" >> $GITHUB_STEP_SUMMARY

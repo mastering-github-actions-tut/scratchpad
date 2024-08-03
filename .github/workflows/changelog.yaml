@@ -4,4 +4,15 @@ on:
     pull_request: 
 
 jobs:
-    
+    create-changlog:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Changelog CI
+              id: changelog-ci
+              uses: saadmk11/changelog-ci@v1.1.2
+        
+            - name: print changelog
+              run: |
+                echo "${{ steps.changelog-ci.outputs.changelog }}"
+                echo "${{ steps.changelog-ci.outputs.changelog }}" >> $GITHUB_STEP_SUMMARY
+

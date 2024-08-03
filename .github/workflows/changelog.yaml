@@ -4,17 +4,15 @@ on:
     pull_request: 
 
 jobs:
-    # create a job called 'changelog' that prints all the changes in the PR
+    # create a job called 'changelog' that prints all the commits messages in the PR
     changelog:
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout
-              uses: actions/checkout@v4
+            - name: checkout code
+              uses: actions/checkout@v2
+            - name: print PR commits
+              run: git log --pretty=format:"%s" ${{ github.event.before }}..${{ github.sha }}
 
-            - name: Print PR changes
-              run: |
-                git fetch origin ${{ github.event.pull_request.base.ref }}
-                git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
             
 
 
